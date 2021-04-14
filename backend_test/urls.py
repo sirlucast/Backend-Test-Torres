@@ -13,10 +13,18 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf.urls import include
 from django.urls import path
+from rest_framework.routers import DefaultRouter
+
+from accounts import urls as accounts_urls
 
 from .utils.healthz import healthz
 
+router = DefaultRouter()
+
 urlpatterns = [
     path("healthz", healthz, name="healthz"),
+    path("", include(router.urls)),
+    path("", include(accounts_urls)),
 ]

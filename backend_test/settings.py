@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+from datetime import timedelta
 
 from .envtools import getenv
 
@@ -37,7 +38,7 @@ APPEND_SLASH = False
 
 # Application definition
 
-INSTALLED_APPS = [
+DJANGO_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -45,9 +46,17 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
+    "rest_framework_simplejwt",
+    "django_filters",
     "django_extensions",
     "backend_test.utils",
 ]
+
+CUSTOM_APPS = [
+    "accounts",
+]
+
+INSTALLED_APPS = DJANGO_APPS + CUSTOM_APPS
 
 MIDDLEWARE = [
     "backend_test.middleware.HealthCheckAwareSessionMiddleware",
@@ -147,8 +156,10 @@ STATIC_ROOT = os.path.join(BASE_DIR, "../collected_static")
 STATIC_URL = "/static/"
 
 REST_FRAMEWORK = {
+    "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
     "DEFAULT_RENDERER_CLASSES": ["rest_framework.renderers.JSONRenderer"],
     "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
         "rest_framework.authentication.SessionAuthentication",
     ],
 }
@@ -162,6 +173,14 @@ if getenv("BROWSABLE_API_RENDERER", default=False, coalesce=bool):
 
 # if getenv("SENTRY_DSN", default=None):
 #    sentry_sdk.init(dsn=getenv("SENTRY_DSN"), integrations=[DjangoIntegration()])
+
+AUTH_USER_MODEL = "accounts.User"
+
+print(os.getenv("REFRESH_TOKEN_LIFETIME", 20))
+SIMPLE_JWT = {
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=os.getenv("REFRESH_TOKEN_LIFETIME", 15)),
+    "ROTATE_REFRESH_TOKENS": True,
+}
 
 LOGGING = {
     "version": 1,
