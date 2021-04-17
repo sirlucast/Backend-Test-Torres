@@ -7,3 +7,4 @@
 docker-compose.yml
 Makefile
 README.md
+.env.example
