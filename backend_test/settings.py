@@ -52,9 +52,7 @@ DJANGO_APPS = [
     "backend_test.utils",
 ]
 
-CUSTOM_APPS = [
-    "accounts",
-]
+CUSTOM_APPS = ["accounts", "menus"]
 
 INSTALLED_APPS = DJANGO_APPS + CUSTOM_APPS
 
@@ -141,7 +139,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "America/Santiago"
 
 USE_I18N = True
 
@@ -162,6 +160,7 @@ REST_FRAMEWORK = {
         "rest_framework_simplejwt.authentication.JWTAuthentication",
         "rest_framework.authentication.SessionAuthentication",
     ],
+    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
 }
 
 if getenv("BROWSABLE_API_RENDERER", default=False, coalesce=bool):
@@ -176,11 +175,23 @@ if getenv("BROWSABLE_API_RENDERER", default=False, coalesce=bool):
 
 AUTH_USER_MODEL = "accounts.User"
 
-print(os.getenv("REFRESH_TOKEN_LIFETIME", 20))
 SIMPLE_JWT = {
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=os.getenv("REFRESH_TOKEN_LIFETIME", 15)),
+    "ACCESS_TOKEN_LIFETIME": timedelta(
+        minutes=getenv("ACCESS_TOKEN_LIFETIME", default=60, coalesce=int)
+    ),
+    "REFRESH_TOKEN_LIFETIME": timedelta(
+        days=getenv("REFRESH_TOKEN_LIFETIME", default=1, coalesce=int)
+    ),
     "ROTATE_REFRESH_TOKENS": True,
 }
+
+# Slack webhooks
+
+SLACK_WEBHOOK = getenv("SLACK_WEBHOOK", default=None)
+SLACK_CLIENT_ID = getenv("SLACK_CLIENT_ID", default=None)
+SLACK_CLIENT_SECRET = getenv("SLACK_CLIENT_SECRET", default=None)
+SLACK_BOT_TOKEN = getenv("SLACK_BOT_TOKEN", default=None)
+SLACK_TEST_CHANNEL = getenv("SLACK_TEST_CHANNEL", default=None)
 
 LOGGING = {
     "version": 1,
