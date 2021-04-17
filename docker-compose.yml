@@ -6,6 +6,8 @@ services:
       context: .
       dockerfile: .docker/Dockerfile_base
     command: shell
+    env_file:
+      - .env
     environment:
       - DEBUG=${DEBUG:-True}
       - APP_LOGGING_LEVEL=${APP_LOGGING_LEVEL:-INFO}
