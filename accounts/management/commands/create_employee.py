@@ -21,7 +21,10 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         slack_user = kwargs["slack_user"]
-        last_id = get_user_model().objects.last().id
+        if get_user_model().objects.last() is None:
+            last_id = 0
+        else:
+            last_id = get_user_model().objects.last().id
         username = f"{settings.EMPLOYEE_USERNAME}_{last_id+1}"
         password = f"{settings.EMPLOYEE_PASSWORD}_{last_id+1}"
         user = get_user_model().objects.create_user(
