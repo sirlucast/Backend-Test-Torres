@@ -185,13 +185,15 @@ SIMPLE_JWT = {
     "ROTATE_REFRESH_TOKENS": True,
 }
 
-# Slack webhooks
-
-SLACK_WEBHOOK = getenv("SLACK_WEBHOOK", default=None)
-SLACK_CLIENT_ID = getenv("SLACK_CLIENT_ID", default=None)
-SLACK_CLIENT_SECRET = getenv("SLACK_CLIENT_SECRET", default=None)
+# SLACK SETTINGS
 SLACK_BOT_TOKEN = getenv("SLACK_BOT_TOKEN", default=None)
-SLACK_TEST_CHANNEL = getenv("SLACK_TEST_CHANNEL", default=None)
+DOMAIN_NAME_BASE = getenv(
+    "DOMAIN_NAME_BASE", default="https://nora.cornershop.io/menu/"
+)
+
+# BASE EMPLOYEES SETTINGS
+EMPLOYEE_USERNAME = getenv("EMPLOYEE_USERNAME", default="employee")
+EMPLOYEE_PASSWORD = getenv("EMPLOYEE_PASSWORD", default="password")
 
 LOGGING = {
     "version": 1,
