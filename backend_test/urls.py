@@ -18,10 +18,12 @@ from django.urls import path
 from rest_framework.routers import DefaultRouter
 
 from accounts import urls as accounts_urls
+from menus.urls import router as menus_routers
 
 from .utils.healthz import healthz
 
 router = DefaultRouter()
+router.registry.extend(menus_routers.registry)
 
 urlpatterns = [
     path("healthz", healthz, name="healthz"),
