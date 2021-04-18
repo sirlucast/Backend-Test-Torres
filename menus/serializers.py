@@ -70,6 +70,7 @@ class MenuSerializer(serializers.ModelSerializer):
 
 class OrderSerializer(serializers.ModelSerializer):
     created_at = serializers.DateTimeField(format="%d-%m-%Y %H:%M:%S", read_only=True)
+    employee = EmployeeSerializer(read_only=True)
 
     class Meta:
         model = Order
@@ -84,7 +85,7 @@ class OrderSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         representation = super().to_representation(instance)
         representation["meal"] = MealSerializer(instance.meal).data
-        representation["employee"] = EmployeeSerializer(instance.employee).data
+        # representation["employee"] = EmployeeSerializer(instance.employee).data
         return representation
 
     def validate_meal(self, value):
