@@ -10,7 +10,11 @@ class User(
 ):
     """Custom user model that supports using some extra field (in future)"""
 
-    pass
+    def get_employee_profile(self):
+        """ If it exists, it returns the employee profile related to User model"""
+        if hasattr(self, "employee"):
+            return self.employee
+        return None
 
 
 class Employee(models.Model):
