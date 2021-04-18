@@ -1,6 +1,6 @@
-import os
 import uuid
 
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -84,7 +84,7 @@ class Menu(models.Model):
         slack message
         """
         employees = Employee.objects.filter(nationality=Employee.CHILEAN)
-        url = os.getenv("DOMAIN_NAME")
+        url = settings.DOMAIN_NAME_BASE
         meal_option = ""
         for idx, meal in enumerate(self.meals.all()):
             dish_count = meal.dish.all().count()
@@ -100,16 +100,14 @@ class Menu(models.Model):
                     dishes += f"y {dish.name}."
             meal_option += f"- Option {idx+1}: {dishes}\n"
         for employee in employees:
-            # message = f"Hi!\nRemind you can choose a meal option for lunch"
-            # +"from today's Nora's menu.\n here: {self.uuid}"
             attachment = [
                 {
                     "color": "#36a64f",
-                    "title": "Menú del día aqui!",
+                    "title": "Today's menu here!",
                     "title_link": f"{url}/menu/{self.uuid}",
-                    "text": "Hola!\nDejo el menú de hoy: :smile:\n"
-                    + f"\n{meal_option}\nTambien puedes ver el menú de hoy aqui:"
-                    + f"\n{url}/menu/{self.uuid}\nTengan lindo día!",
+                    "text": "Hello!,\nI share with you today's menu :smile:\n"
+                    + f"\n{meal_option}\nYou can also see today's menu here:"
+                    + f"\n{url}/menu/{self.uuid}\nHave a nice day!",
                     "footer": "Nora's app",
                     "footer_icon": "https://platform.slack-edge.com/img/defau"
                     + "lt_application_icon.png",
@@ -119,6 +117,7 @@ class Menu(models.Model):
 
     @staticmethod
     def check_todays_menu_is_created():
+        """ Check if today0s menu is already created """
         menu_today, created = Menu.objects.get_or_create(
             menu_date=timezone.localtime(timezone.now()).date()
         )
