@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from accounts.models import Employee
 from menus import helpers
@@ -87,9 +87,9 @@ class Menu(models.Model):
         url = settings.DOMAIN_NAME_BASE
         meal_option = ""
         for idx, meal in enumerate(self.meals.all()):
-            dish_count = meal.dish.all().count()
+            dish_count = meal.dishes.all().count()
             dishes = ""
-            for jdx, dish in enumerate(meal.dish.all()):
+            for jdx, dish in enumerate(meal.dishes.all()):
                 if dish_count == 1:
                     dishes += f"{dish.name}."
                 elif jdx < dish_count - 2:
