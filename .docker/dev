@@ -39,7 +39,7 @@ test)
   pytest "$@" --flake8 --isort --black --junitxml=/dev/shm/test-results/pytest.xml
 ;;
 cov)
-  pytest "$@" --flake8 --isort --black --cov=backend_test --junitxml=/dev/shm/test-results/pytest.xml
+  pytest "$@" --flake8 --isort --black --cov=. --junitxml=/dev/shm/test-results/pytest.xml
 ;;
 isort)
   isort .
