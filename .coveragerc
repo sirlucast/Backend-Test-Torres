@@ -4,6 +4,17 @@ omit =
     */tests/*
     */test/*
     */tests.py
+    */__init__.py
     backend_test/settings.py
+    backend_test/conftest.py
+    backend_test/middleware.py
+    backend_test/envtools.py
     backend_test/wsgi.py
     backend_test/logging_formatter.py
+    backend_test/utils/*
+    manage.py
+    gunicorn_config.py
+    */apps.py
+
+[report]
+show_missing = True
