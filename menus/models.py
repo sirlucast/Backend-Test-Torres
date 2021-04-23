@@ -8,7 +8,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from accounts.models import Employee
-from menus import helpers
+from menus.tasks import post_to_user_slack_task
 
 
 def validate_menu_date(value):
@@ -107,22 +107,14 @@ class Menu(models.Model):
                     "title_link": f"{url}/menu/{self.uuid}",
                     "text": "Hello!,\nI share with you today's menu :smile:\n"
                     + f"\n{meal_option}\nYou can also see today's menu here:"
-                    + f"\n{url}/menu/{self.uuid}\nHave a nice day!",
+                    + f"\n{url}/{self.uuid}\nHave a nice day!",
                     "footer": "Nora's app",
                     "footer_icon": "https://platform.slack-edge.com/img/defau"
                     + "lt_application_icon.png",
                 }
             ]
-            helpers.post_to_user_slack(employee.slack_user, attachment=attachment)
-
-    @staticmethod
-    def check_todays_menu_is_created():
-        """ Check if today0s menu is already created """
-        menu_today, created = Menu.objects.get_or_create(
-            menu_date=timezone.localtime(timezone.now()).date()
-        )
-        if created:
-            menu_today.send_today_menu_slack_each_user()
+            fallback = f"Today's menu here: {url}/{self.uuid}"
+            post_to_user_slack_task(employee.slack_user, attachment, fallback)
 
 
 class Order(models.Model):

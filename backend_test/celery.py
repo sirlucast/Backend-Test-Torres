@@ -15,7 +15,7 @@ class CelerySettings:
     # Time and date settings
     # https://docs.celeryproject.org/en/v4.3.0/userguide/configuration.html#time-and-date-settings
     CELERY_ENABLE_UTC = True
-    CELERY_TIMEZONE = "UTC"
+    CELERY_TIMEZONE = "America/Santiago"
     # Task settings
     # https://docs.celeryproject.org/en/v4.3.0/userguide/configuration.html#task-settings
     CELERY_TASK_SERIALIZER = "json"
@@ -30,6 +30,7 @@ class CelerySettings:
     CELERYD_TASK_TIME_LIMIT = 60 * 2  # hard time limit
     CELERYD_TASK_SOFT_TIME_LIMIT = int(CELERYD_TASK_TIME_LIMIT * 0.85)
     CELERY_ACKS_LATE = True
+    CELERY_TASK_TRACK_STARTED = True
     CELERY_TASK_REJECT_ON_WORKER_LOST = True
     # Task result backend settings
     # https://docs.celeryproject.org/en/v4.3.0/userguide/configuration.html#task-result-backend-settings

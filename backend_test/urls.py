@@ -15,18 +15,39 @@ Including another URLconf
 """
 from django.conf.urls import include
 from django.urls import path
+from rest_framework import permissions
 from rest_framework.routers import DefaultRouter
+
+from drf_yasg import openapi
+from drf_yasg.views import get_schema_view
 
 from accounts import urls as accounts_urls
 from menus.urls import router as menus_routers
 
 from .utils.healthz import healthz
 
+schema_view = get_schema_view(
+    openapi.Info(
+        title="Nora's app API",
+        default_version="v1",
+        description="API documentation for Nora's app",
+        contact=openapi.Contact(email="jlmax.torres@gmail.com"),
+    ),
+    public=True,
+    permission_classes=(permissions.AllowAny,),
+)
+
 router = DefaultRouter()
 router.registry.extend(menus_routers.registry)
 
 urlpatterns = [
     path("healthz", healthz, name="healthz"),
+    path(
+        "doc/",
+        schema_view.with_ui("swagger", cache_timeout=0),
+        name="schema-swagger-ui",
+    ),
+    path("redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),
     path("", include(router.urls)),
     path("", include(accounts_urls)),
 ]

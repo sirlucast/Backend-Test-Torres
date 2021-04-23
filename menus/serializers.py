@@ -89,7 +89,7 @@ class OrderSerializer(serializers.ModelSerializer):
         return representation
 
     def validate_meal(self, value):
-        if timezone.localtime(timezone.now()).hour < LIMIT_HOUR:
+        if timezone.localtime(timezone.now()).hour > LIMIT_HOUR:
             raise serializers.ValidationError(
                 _("Exceeded meal selection time. Limit hour:") + f" {LIMIT_HOUR}"
             )

@@ -1,20 +1,15 @@
-import pytest
 from django.conf import settings
 
-from _pytest.outcomes import Failed
 from slack_sdk import WebClient
-from slack_sdk.errors import SlackApiError
 
 from menus import helpers
 
 
-def test_get_exception_on_post_to_user_slack_fail():
+def test_get_exception_on_post_to_user_slack_fail(caplog):
     """ Test failed Slack Exception using a fake invalid username"""
-    try:
-        with pytest.raises(SlackApiError):
-            helpers.post_to_user_slack("fake_username", "msg")
-    except Failed:
-        pass
+    caplog.clear()
+    helpers.post_to_user_slack(username="fake_username", message="test")
+    assert ["channel_not_found"] == [rec.message for rec in caplog.records]
 
 
 def test_api_calling_code():
